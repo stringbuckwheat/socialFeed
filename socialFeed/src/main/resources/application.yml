@@ -12,3 +12,18 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
+
+  data:
+    redis:
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 10
+          min-idle: 2
+      host: ${REDIS_HOST}
+      port: 15250
+      password: ${PASSWORD}
+      username: Default
+
+jwt:
+  key: ${JWT_KEY}

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/socialFeed.iml" filepath="$PROJECT_DIR$/.idea/socialFeed.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/socialFeed.socialFeed.main~1.iml" filepath="$PROJECT_DIR$/.idea/modules/socialFeed.socialFeed.main~1.iml" />
-    </modules>
-  </component>
-</project>

@@ -1,6 +1,7 @@
 package backend.socialFeed.user.controller;
 
 import backend.socialFeed.user.dto.JoinValidRequestDto;
+import backend.socialFeed.user.dto.UserVerifyRequestDto;
 import backend.socialFeed.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,10 @@ public class UserController {
     @PostMapping("/register")
     public void register(@RequestBody @Valid JoinValidRequestDto validRequestDto){
         userService.join(validRequestDto);
+    }
+
+    @PostMapping("/verify")
+    public void verifyUser(@RequestBody UserVerifyRequestDto verifyRequestDto) {
+        userService.verifyUser(verifyRequestDto);
     }
 }

@@ -1,4 +1,4 @@
-package backend.socialFeed.auth.controller;
+package backend.socialFeed.jwt.controller;
 
 import backend.socialFeed.jwt.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;

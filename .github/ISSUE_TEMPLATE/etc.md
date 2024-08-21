@@ -1,14 +1,14 @@
 ---
-name: "\U0001F41B FIX"
-about: 버그 수정
-title: "[FIX]"
-labels: "\U0001F41B FIX"
+name: ETC
+about: 그 외 이슈
+title: ''
+labels: ''
 assignees: ''
 
 ---
 
 ## 📖 Describe
-작업에 대한 설명
+> 작업에 대한 설명
 
 ## ✅ TODO
 - [ ] TODO

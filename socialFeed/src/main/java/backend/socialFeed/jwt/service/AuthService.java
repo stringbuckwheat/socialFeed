@@ -3,15 +3,19 @@ package backend.socialFeed.jwt.service;
 import backend.socialFeed.jwt.util.CookieUtil;
 import backend.socialFeed.jwt.util.JwtUtil;
 import backend.socialFeed.user.constant.Constants;
+import backend.socialFeed.user.dto.UserVerifyRequestDto;
 import backend.socialFeed.user.model.User;
 import backend.socialFeed.user.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.util.Optional;
-
+@AllArgsConstructor
 @Service
 public class AuthService {
 
@@ -21,44 +25,36 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthService(JwtUtil jwtUtil, CookieUtil cookieUtil, RedisService redisService,
-                       UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.jwtUtil = jwtUtil;
-        this.cookieUtil = cookieUtil;
-        this.redisService = redisService;
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    public void login(HttpServletResponse response, String email, String password) {
-        Optional<User> user = userRepository.findByEmail(email);
-
-        if (user.isEmpty()) {
-            throw new IllegalArgumentException(Constants.EMAIL_NOT_EXISTS);
-        }
+    public ResponseEntity<String> login(HttpServletResponse response, UserVerifyRequestDto verifyingUser) {
+        // 유저 정보 존재 확인
+        User user = userRepository
+                                .findByEmail(verifyingUser.getEmail())
+                                .orElseThrow(() -> new UsernameNotFoundException(Constants.EMAIL_NOT_EXISTS));
 
         // 비밀번호 검증
-        if (!passwordEncoder.matches(password, user.get().getPassword())) {
-            throw new IllegalArgumentException(Constants.PASSWORD_NOT_MATCH);
+        if (!passwordEncoder.matches(verifyingUser.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException(Constants.PASSWORD_NOT_MATCH);
         }
 
         // acs token 및 rfr token 생성
-        String accessToken = jwtUtil.generateAccessToken(email);
-        String refreshToken = jwtUtil.generateRefreshToken(email);
+        String accessToken = jwtUtil.generateAccessToken(verifyingUser.getEmail());
+        String refreshToken = jwtUtil.generateRefreshToken(verifyingUser.getEmail());
 
         // rfr token을 Redis에 저장
-        redisService.saveRefreshToken(email, refreshToken);
+        redisService.saveRefreshToken(verifyingUser.getEmail(), refreshToken);
 
         // acs token 및 rfr token을 쿠키로 설정
-        cookieUtil.createAccessTokenCookie(response, accessToken);
-        cookieUtil.createRefreshTokenCookie(response, refreshToken);
+        cookieUtil.createAccessTokenCookie(response, accessToken, true);
+        cookieUtil.createRefreshTokenCookie(response, refreshToken, true);
+
+        return ResponseEntity.ok(verifyingUser.getEmail());
     }
 
 
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         // 쿠키에서 acs token 및 rfr token 삭제
-        cookieUtil.deleteAccessTokenCookie(response);
-        cookieUtil.deleteRefreshTokenCookie(response);
+        cookieUtil.deleteAccessTokenCookie(response, true);
+        cookieUtil.deleteRefreshTokenCookie(response, true);
 
         // acs token에서 사용자 이메일 추출
         String accessToken = cookieUtil.getAccessTokenFromCookie(request);
@@ -68,5 +64,7 @@ public class AuthService {
             // Redis에서 rfr token 삭제
             redisService.deleteRefreshToken(email);
         }
+
+        return ResponseEntity.ok(Constants.LOG_OUT);
     }
 }

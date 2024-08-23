@@ -20,6 +20,7 @@ public class ArticleController {
             @PathVariable("articleId") String articleId) {
         Article article = articleService.getArticle(articleId);
 
+        // 엔티티를 response DTO 로 변환
         ArticleResponseDto responseDto = ArticleResponseDto.builder()
                 .id(article.getId())
                 .userId(article.getUser().getId())
@@ -33,6 +34,7 @@ public class ArticleController {
                 .updatedAt(article.getUpdatedAt())
                 .build();
 
+        // DTO 반환
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 }

@@ -1,6 +1,10 @@
 package backend.socialFeed.auth.config;
 
 import backend.socialFeed.common.dto.ErrorResponseDto;
+import backend.socialFeed.jwt.filter.JwtFilter;
+import backend.socialFeed.jwt.service.RedisService;
+import backend.socialFeed.jwt.util.CookieUtil;
+import backend.socialFeed.jwt.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.PrintWriter;
 
@@ -21,6 +26,10 @@ import java.io.PrintWriter;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    //for JwtFilter
+    private final JwtUtil jwtUtil;
+    private final CookieUtil cookieUtil;
+    private final RedisService redisService;
 
     // 임시 WHITELIST
     private static final String[] PUBLIC_WHITELIST = {
@@ -34,6 +43,10 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain config(HttpSecurity http) throws Exception {
+
+        //JwtFilter 추가
+        JwtFilter jwtFilter = new JwtFilter(jwtUtil, cookieUtil, redisService);
+
         return http
                 .csrf((csrfConfig) ->
                         csrfConfig.disable()
@@ -47,6 +60,19 @@ public class SecurityConfig {
                         authorizeRequests
                                 .requestMatchers(PUBLIC_WHITELIST).permitAll()
                                 .anyRequest().authenticated()
+                )
+                //jwtfilter, login 추가
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin((formLogin) ->
+                        formLogin
+                                .loginPage("/login")
+                                .loginProcessingUrl("/auth/login")
+                                .defaultSuccessUrl("/home")
+                )
+                .logout((logout) ->
+                        logout
+                                .logoutUrl("/auth/logout")
+                                .logoutSuccessUrl("/home")
                 )
                 .exceptionHandling((exceptionConfig) ->
                         exceptionConfig

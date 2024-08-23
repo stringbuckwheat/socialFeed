@@ -8,7 +8,7 @@ import org.springframework.data.redis.core.TimeToLive;
 
 @RedisHash
 @Getter
-@Setter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class RefreshToken {

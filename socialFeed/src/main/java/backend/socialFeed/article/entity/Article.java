@@ -40,7 +40,8 @@ public class Article {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    // 조회수의 디폴트 값은 0 이고(0부터 시작), null은 불가능하다.
+    @Column(columnDefinition = "integer default 0", nullable = false)
     private Integer viewCount;
 
     @Column(nullable = false)
@@ -54,4 +55,8 @@ public class Article {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public void plusView() {
+        this.viewCount += 1;
+    }
 }

@@ -1,4 +1,4 @@
-package backend.socialFeed.jwt;
+package backend.socialFeed.jwt.entity;
 
 
 import lombok.*;

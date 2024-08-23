@@ -1,9 +1,8 @@
 package backend.socialFeed.jwt.service;
 
-import backend.socialFeed.jwt.RefreshToken;
+import backend.socialFeed.jwt.entity.RefreshToken;
 import backend.socialFeed.jwt.repository.RefreshTokenRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor

@@ -6,7 +6,7 @@ import backend.socialFeed.user.constant.Constants;
 import backend.socialFeed.user.dto.UserVerifyRequestDto;
 import backend.socialFeed.user.model.User;
 import backend.socialFeed.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class AuthService {
 

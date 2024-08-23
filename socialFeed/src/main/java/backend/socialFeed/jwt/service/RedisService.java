@@ -2,10 +2,10 @@ package backend.socialFeed.jwt.service;
 
 import backend.socialFeed.jwt.entity.RefreshToken;
 import backend.socialFeed.jwt.repository.RefreshTokenRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class RedisService {
 

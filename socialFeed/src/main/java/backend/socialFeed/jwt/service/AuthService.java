@@ -52,6 +52,7 @@ public class AuthService {
 
 
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+
         // 쿠키에서 acs token 및 rfr token 삭제
         cookieUtil.deleteAccessTokenCookie(response, true);
         cookieUtil.deleteRefreshTokenCookie(response, true);

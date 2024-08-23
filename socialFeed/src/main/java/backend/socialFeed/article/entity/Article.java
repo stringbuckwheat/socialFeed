@@ -54,4 +54,8 @@ public class Article {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public void updateShareCount() {
+        this.shareCount += 1;
+    }
 }

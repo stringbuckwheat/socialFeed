@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -40,7 +41,8 @@ public class Article {
     @Column(nullable = false)
     private String content;
 
-    // 조회수의 디폴트 값은 0 이고(0부터 시작), null은 불가능하다.
+    // viewCount(조회수)의 디폴트 값은 0 이고(0부터 시작), null은 불가능하다.
+    @Setter
     @Column(columnDefinition = "integer default 0", nullable = false)
     private Integer viewCount;
 
@@ -55,8 +57,4 @@ public class Article {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    public void plusView() {
-        this.viewCount += 1;
-    }
 }

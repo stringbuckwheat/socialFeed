@@ -1,14 +1,10 @@
 package backend.socialFeed.article.entity;
 
 import backend.socialFeed.article.ArticleType;
+import backend.socialFeed.hashtags.entity.Hashtags;
 import backend.socialFeed.user.model.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,10 +14,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 public class Article {
@@ -58,7 +56,12 @@ public class Article {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "article")
+    private List<Hashtags> hashtags;
+
     public void updateShareCount() {
         this.shareCount += 1;
     }
+
 }

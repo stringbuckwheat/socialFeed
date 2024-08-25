@@ -4,13 +4,9 @@ import backend.socialFeed.article.ArticleType;
 import backend.socialFeed.article.entity.Article;
 import backend.socialFeed.article.repository.ArticleRepository;
 import backend.socialFeed.user.model.User;
-import backend.socialFeed.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -21,7 +17,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)

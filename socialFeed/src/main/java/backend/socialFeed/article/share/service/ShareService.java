@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.ClientResponse;
+import reactor.core.publisher.Flux;
 
 import java.util.Map;
 import java.util.EnumMap;
@@ -42,17 +42,15 @@ public class ShareService {
                 .build();
 
         // 공유 API 호출
-        String response = webClient.post()
+        Flux<String> response = webClient.post()
                 .retrieve()
-                .onStatus(
-                        status -> status.is4xxClientError() || status.is5xxServerError(),
-                        ClientResponse::createException
-                )
-                .bodyToMono(String.class)
-                .block();
+                .bodyToFlux(String.class);
 
-        //
-        log.info("API 호출 성공. 응답: {}", response);
+        response.subscribe(
+                data -> log.info("API 호출 성공 결과: {}", data),
+                error -> log.error("API 호출 실패 결과: {}", error.getMessage()),
+                () -> log.info("API 호출이 완료되었습니다.")
+        );
 
         // ShareCount 증가
         article.updateShareCount();

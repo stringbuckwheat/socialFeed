@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.ClientResponse;
 
 import java.util.Map;
 import java.util.EnumMap;
@@ -41,10 +42,17 @@ public class ShareService {
                 .build();
 
         // 공유 API 호출
-        webClient.post()
+        String response = webClient.post()
                 .retrieve()
-                .bodyToMono(Void.class)
+                .onStatus(
+                        status -> status.is4xxClientError() || status.is5xxServerError(),
+                        ClientResponse::createException
+                )
+                .bodyToMono(String.class)
                 .block();
+
+        //
+        log.info("API 호출 성공. 응답: {}", response);
 
         // ShareCount 증가
         article.updateShareCount();

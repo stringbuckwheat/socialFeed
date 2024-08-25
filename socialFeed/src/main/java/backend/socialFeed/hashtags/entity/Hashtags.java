@@ -1,6 +1,7 @@
 package backend.socialFeed.hashtags.entity;
 
 import backend.socialFeed.article.entity.Article;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +27,7 @@ public class Hashtags {
     @Column(nullable = false)
     private String name;
 
+    @JsonBackReference
     @ManyToOne
     private Article article;
 }

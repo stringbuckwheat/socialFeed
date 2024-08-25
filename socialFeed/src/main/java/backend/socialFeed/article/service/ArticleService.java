@@ -1,8 +1,13 @@
 package backend.socialFeed.article.service;
 
+import backend.socialFeed.article.ArticleType;
 import backend.socialFeed.article.entity.Article;
-import backend.socialFeed.article.respotiory.ArticleRepository;
+import backend.socialFeed.article.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,5 +24,11 @@ public class ArticleService {
         article.setViewCount(article.getViewCount() + 1);
 
         return articleRepository.save(article);
+    }
+
+    public Page<Article> getArticles(String hashtag, ArticleType type, String orderBy, String orderDirection, String searchBy, String search, int pageCount, int page) {
+        Sort sort = Sort.by(Sort.Direction.fromString(orderDirection), orderBy);
+        Pageable pageable = PageRequest.of(page, pageCount, sort);
+        return articleRepository.searchArticles(hashtag, type, searchBy, search, pageable);
     }
 }

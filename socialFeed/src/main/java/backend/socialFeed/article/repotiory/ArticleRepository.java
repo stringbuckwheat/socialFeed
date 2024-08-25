@@ -1,4 +1,4 @@
-package backend.socialFeed.article.respotiory;
+package backend.socialFeed.article.repotiory;
 
 import backend.socialFeed.article.ArticleType;
 import backend.socialFeed.article.entity.Article;

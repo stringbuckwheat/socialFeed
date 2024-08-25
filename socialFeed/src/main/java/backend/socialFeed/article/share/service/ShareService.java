@@ -2,7 +2,7 @@ package backend.socialFeed.article.share.service;
 
 import backend.socialFeed.article.ArticleType;
 import backend.socialFeed.article.entity.Article;
-import backend.socialFeed.article.respotiory.ArticleRepository;
+import backend.socialFeed.article.repotiory.ArticleRepository;
 import backend.socialFeed.article.share.constant.ErrorMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

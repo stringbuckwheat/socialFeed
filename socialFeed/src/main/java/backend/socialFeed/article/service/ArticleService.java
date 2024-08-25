@@ -1,7 +1,7 @@
 package backend.socialFeed.article.service;
 
 import backend.socialFeed.article.entity.Article;
-import backend.socialFeed.article.respotiory.ArticleRepository;
+import backend.socialFeed.article.repotiory.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

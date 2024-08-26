@@ -6,6 +6,7 @@ import backend.socialFeed.user.constant.Constants;
 import backend.socialFeed.user.dto.UserVerifyRequestDto;
 import backend.socialFeed.user.model.User;
 import backend.socialFeed.user.repository.UserRepository;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,8 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final JwtUtil jwtUtil;
@@ -36,18 +37,22 @@ public class AuthService {
             throw new BadCredentialsException(Constants.PASSWORD_NOT_MATCH);
         }
 
-        // acs token 및 rfr token 생성
-        String accessToken = jwtUtil.generateAccessToken(verifyingUser.getEmail());
-        String refreshToken = jwtUtil.generateRefreshToken(verifyingUser.getEmail());
+        try{
+            // acs token 및 rfr token 생성
+            String accessToken = jwtUtil.generateAccessToken(verifyingUser.getEmail());
+            String refreshToken = jwtUtil.generateRefreshToken(verifyingUser.getEmail());
 
-        // rfr token을 Redis에 저장
-        redisService.saveRefreshToken(verifyingUser.getEmail(), refreshToken);
+            // rfr token을 Redis에 저장
+            redisService.saveRefreshToken(verifyingUser.getEmail(), refreshToken);
 
-        // acs token 및 rfr token을 쿠키로 설정
-        cookieUtil.createAccessTokenCookie(response, accessToken, true);
-        cookieUtil.createRefreshTokenCookie(response, refreshToken, true);
+            // acs token 및 rfr token을 쿠키로 설정
+            cookieUtil.createAccessTokenCookie(response, accessToken, true);
+            cookieUtil.createRefreshTokenCookie(response, refreshToken, true);
 
-        return ResponseEntity.ok(verifyingUser.getEmail());
+            return ResponseEntity.ok(verifyingUser.getEmail());
+        }catch (JwtException e) {
+            return ResponseEntity.badRequest().body(Constants.JWT_EXCEPTION);
+        }
     }
 
 

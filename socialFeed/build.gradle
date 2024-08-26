@@ -40,6 +40,7 @@ dependencies {
 
 	//Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	testImplementation 'it.ozimov:embedded-redis:0.7.3'
 
 	// JWT 관련 의존성
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'

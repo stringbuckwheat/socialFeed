@@ -8,17 +8,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
+@ToString(of = {"id", "name"})
 public class Hashtags {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +27,8 @@ public class Hashtags {
     @JsonBackReference
     @ManyToOne
     private Article article;
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
 }

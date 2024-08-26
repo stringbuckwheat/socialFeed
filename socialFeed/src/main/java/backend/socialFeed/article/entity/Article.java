@@ -5,15 +5,12 @@ import backend.socialFeed.hashtags.entity.Hashtags;
 import backend.socialFeed.user.model.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -57,11 +54,15 @@ public class Article {
     private LocalDateTime updatedAt;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "article")
-    private List<Hashtags> hashtags;
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Hashtags> hashtags = new ArrayList<>();
 
     public void updateShareCount() {
         this.shareCount += 1;
     }
 
+    public void addHashtag(Hashtags hashtag) {
+        hashtags.add(hashtag);
+        hashtag.setArticle(this);
+    }
 }

@@ -55,15 +55,16 @@ public class StatisticRequest {
         StatisticValue finalValue = StatisticValue.from(value);
 
         // 통계 시작일, 종료일 유효성 검사
+        // 2024-08-26, 2024-08-27이 제공될 때, 1을 반환
         long daysBetween = ChronoUnit.DAYS.between(finalStart, finalEnd);
 
         if(daysBetween < 0) {
             // 시작일이 종료일보다 미래
             throw new IllegalArgumentException(START_AFTER_END);
-        } else if(finalType == StatisticType.DATE && daysBetween > 30) {
+        } else if(finalType == StatisticType.DATE && daysBetween >= 30) {
             // 일별 통계 시 30일 초과 불가
             throw new IllegalArgumentException(TOO_LONG_DATE_QUERY);
-        } else if(finalType == StatisticType.HOUR && daysBetween > 7) {
+        } else if(finalType == StatisticType.HOUR && daysBetween >= 7) {
             // 시간별 통계 시 7일 초과 불가
             throw new IllegalArgumentException(TOO_LONG_HOUR_QUERY);
         }

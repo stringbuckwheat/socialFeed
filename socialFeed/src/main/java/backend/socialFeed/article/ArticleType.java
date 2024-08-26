@@ -1,5 +1,5 @@
 package backend.socialFeed.article;
 
 public enum ArticleType {
-    FACEBOOK, TWITTER, INSTAGRAM, THREAD;
+    FACEBOOK, TWITTER, INSTAGRAM, THREADS;
 }

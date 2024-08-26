@@ -51,7 +51,6 @@ public class LikeService {
                 () -> log.info("API 호출이 완료되었습니다.")
         );
 
-        log.info("API 호출 성공. 응답: {}", response);
 
         // LikeCount 증가
         article.updateLikeCount();

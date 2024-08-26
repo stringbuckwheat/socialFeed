@@ -64,4 +64,7 @@ public class Article {
         this.shareCount += 1;
     }
 
+    public void updateLikeCount() {
+        this.likeCount += 1;
+    }
 }

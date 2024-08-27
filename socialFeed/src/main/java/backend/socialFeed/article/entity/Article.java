@@ -61,6 +61,9 @@ public class Article {
         this.shareCount += 1;
     }
 
+    public void updateLikeCount() {
+        this.likeCount += 1;
+
     public void addHashtag(Hashtags hashtag) {
         hashtags.add(hashtag);
         hashtag.setArticle(this);

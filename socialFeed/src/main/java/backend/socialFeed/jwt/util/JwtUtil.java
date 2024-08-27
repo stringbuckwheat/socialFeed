@@ -3,19 +3,16 @@ package backend.socialFeed.jwt.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.persistence.Column;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
-
-import static org.yaml.snakeyaml.tokens.Token.ID.Key;
+import java.util.List;
 
 @Component
 public class JwtUtil {
@@ -82,5 +79,26 @@ public class JwtUtil {
     // 토큰에서 사용자 이름 추출
     public String getEmailFromToken(String token) {
         return getClaimsFromToken(token).getSubject();
+    }
+
+    public List<String> getRolesFromToken(String newAccessToken) {
+        try {
+            // JWT 비밀 키를 사용하여 Claims 객체를 추출
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(newAccessToken)
+                    .getBody();
+
+            List<String> roles = claims.get("roles", List.class);
+
+            return roles != null ? roles : List.of(); // null 체크 후 반환
+        } catch (SignatureException e) {
+            // JWT 서명이 유효하지 않거나 토큰이 잘못된 경우 예외 처리
+            throw new RuntimeException("유효하지 않은 토큰입니다.", e);
+        } catch (Exception e) {
+            // 다른 예외 처리
+            throw new RuntimeException("토큰처리를 할 수 없습니다.", e);
+        }
     }
 }

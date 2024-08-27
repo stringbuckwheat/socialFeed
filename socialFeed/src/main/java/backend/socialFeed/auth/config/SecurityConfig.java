@@ -6,6 +6,7 @@ import backend.socialFeed.jwt.service.RedisService;
 import backend.socialFeed.jwt.util.CookieUtil;
 import backend.socialFeed.jwt.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,17 +64,8 @@ public class SecurityConfig {
                 )
                 //jwtfilter, login 추가
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin((formLogin) ->
-                        formLogin
-                                .loginPage("/login")
-                                .loginProcessingUrl("/auth/login")
-                                .defaultSuccessUrl("/home")
-                )
-                .logout((logout) ->
-                        logout
-                                .logoutUrl("/auth/logout")
-                                .logoutSuccessUrl("/home")
-                )
+                .formLogin(formLogin -> formLogin.disable())
+                .logout(logout -> logout.disable())
                 .exceptionHandling((exceptionConfig) ->
                         exceptionConfig
                                 .authenticationEntryPoint(unauthorizedEntryPoint)

@@ -1,15 +1,28 @@
 목차
+1. Social Feed?
+   1) 프로젝트 설명
+   2) 개발 기간
+   3) 팀 구성 및 역할
+   4) 개발 환경
+   5) ERD
+   6) 코딩 컨벤션
+2. 통계 기능
+   1) 구현 상세
+   2) 트러블슈팅 - 복잡한 기본값, 예외 로직이 필요한 요청 DTO 생성하기
 
 
+     
 # Social Feed?
 소셜 미디어 통합 Feed 서비스
 * 인스타그램, 스레드, 페이스북, 트위터 등 여러 SNS에 게시된 특정 해시태그를 기반으로, 관련 게시물을 한 곳에서 통합적으로 확인할 수 있는 웹서비스
 * 사용자는 통합된 게시물들을 상세 조회, 공유, 좋아요할 수 있으며, 원하는 해시태그를 검색/조회 가능
 * 즉, 하나의 채널로 유저, 또는 브랜드 의 SNS 노출 게시물 및 통계 확인 가능
 
+     
 ## 개발 기간
 2024.08.20 - 2024.08.26
 
+     
 ## 팀 구성 및 역할
 |이름|역할|gitHub|
 |------|---|---|
@@ -20,6 +33,7 @@
 |최미선|jwt|https://github.com/developerchoims|
 |최서경|통계|https://github.com/stringbuckwheat|
 
+     
 ## 개발 환경
 * `Spring Boot(3.3)`
   * Spring Security
@@ -27,12 +41,16 @@
 * `JPA/Hibernate`, `QueryDsl`
 * `MySQL(9.0)`, `Redis`
 
+     
 ## ERD
 ![image](https://github.com/user-attachments/assets/83479aee-5754-468e-932b-877c60074641)
 
+     
 ## 컨벤션
 [코딩 컨벤션] https://github.com/PreOnboarding-Team-11/socialFeed/wiki/%E2%9C%85-Github-Convention
 
+
+     
 # 통계 기능📊
 * `해시태그`, `시작일`, `종료일`을 기반으로 `게시글 수`, `조회수`, `좋아요 수`, `공유 수` 등의 통계를 `일별`/`시간별`로 필터링하여 제공하는 기능 
 
@@ -55,21 +73,32 @@
 ![statistic_test](https://github.com/user-attachments/assets/f87cdd16-00a7-4587-9069-46e89bbe0a8a)
   * (예외 메시지 클래스 제외) 테스트 커버리지 100% 달성
 
+
+     
 ## 💡 트러블슈팅
 ### 복잡한 기본값, 예외 로직이 필요한 요청 DTO 생성하기
 * 배경: StatisticRequest (통계 요청 DTO) 생성 시 복잡한 기본값, 예외 로직이 요구됨
 
 <details>
     <summary>복잡한 기본값, 예외 로직</summary>
-    * 복잡한 기본값
-        * hashtag 필드가 없다면 요청자의 username 사용
-        * 통계 시작일이 없다면 오늘 기준 일주일 전으로 설정 
-        * 통계 종료일이 없다면 오늘로 초기화
-    * 예외 처리
-        * 통계 시작일이 종료일보다 미래인 경우
-        * 일별 통계에서 30일을 초과한 경우
-        * 시간대별 통계에서 7일을 초과한 경우
+    <ul>
+        <li><strong>복잡한 기본값</strong>
+            <ul>
+                <li>hashtag 필드가 없다면 요청자의 username 사용</li>
+                <li>통계 시작일이 없다면 오늘 기준 일주일 전으로 설정</li>
+                <li>통계 종료일이 없다면 오늘로 초기화</li>
+            </ul>
+        </li>
+        <li><strong>예외 처리</strong>
+            <ul>
+                <li>통계 시작일이 종료일보다 미래인 경우</li>
+                <li>일별 통계에서 30일을 초과한 경우</li>
+                <li>시간대별 통계에서 7일을 초과한 경우</li>
+            </ul>
+        </li>
+    </ul>
 </details>
+
 
 * 문제: 컨트롤러에 DTO 생성 로직, 비즈니스 로직이 혼재되는 상황 발생 
     * `Builder`와 `삼항연산자`를 사용하여 객체 생성, 이후 `컨트롤러`에서 **예외처리** 수행 
